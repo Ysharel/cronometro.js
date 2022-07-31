@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100vw;
+            height: 100vh;
+
+        }
+        section {
+            width: 270px;
+            height: 258px;
+            border-radius: 130px;
+            background-color: rgb(125, 125, 240);
+        }
+        .components {
+            margin-top: 61px;
+        }
+        .cronometro {
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+        .botoes {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            
+        }
+
+        input {
+            margin: 5px;
+        }
+        input:hover {
+            cursor: pointer;
+        }
+        .demo {
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <title>Cronometro</title>
+</head>
+
+<body>
+    <section>
+        <div class="components">
+        <h1>Cronometro</h1>
+        <div class="cronometro">
+            00:00:00
+        </div>
+
+        <div class="botoes">
+            <input type="button" class="button" onclick="start()" value="começar">
+            <input type="button" onclick="stop()" value="parar">
+            <input type="button" onclick="reset()" value="resetar">
+        </div>
+        </div>
+    </section>
+
+    <script>
+        let data = new Date()
+
+        let cronometro = document.querySelector('.cronometro')
+       
+        let ml = 0
+        let sec = 0
+        let min = 0
+
+        let show
+
+        let button = document.querySelector(".button");
+
+        function showTime() {
+
+           data.setHours(0, min, sec, ml)
+
+           let m = data.getMilliseconds()
+           let s = data.getSeconds()
+           let mm = data.getMinutes()
+
+            ml += 1
+
+            let mins = `0${mm}`
+            let secs = `0${s}`
+            let milis = `0${m}`
+            
+            cronometro.innerHTML = `${mins}:${secs}:${milis}`
+
+           if (ml == 99) {
+                ml = 0
+                sec += 1
+            }
+           
+            if (milis.length == 3  ) {
+                cronometro.innerHTML = `0${mm}:${secs}:${milis.replace('0', '') }`
+            }
+            if (secs.length == 3  ) {
+                cronometro.innerHTML = `${mins}:${secs.replace('0', '')}:${milis.replace('0', '') }`
+            }
+            if (secs.length == 3 && milis.length == 2 ) {
+                cronometro.innerHTML = `0${mm}:${secs.replace('0', '')}:${milis}`
+            }
+
+        }
+
+        function start() {
+            clearInterval(show);
+            show = setInterval(showTime, 10.2);
+            button.disabled = true;
+        }
+
+        function stop() {
+            clearInterval(show);
+            button.disabled = false;
+            sec = 0
+        }
+
+        function reset() {
+            clearInterval(show);
+            button.disabled = false;
+
+            ml = 0
+            sec = 0
+            min = 0
+
+            cronometro.innerHTML = '00:00:00'
+
+        }
+    </script>
+</body>
+
+</html>
